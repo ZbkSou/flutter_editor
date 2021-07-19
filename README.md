@@ -60,7 +60,7 @@ class MySpecialTextSpanBuilder extends SpecialTextSpanBuilder {
 }
 ```
 
-1. 设置样式内容控制器
+2. 设置样式内容控制器
 
 ```
  @override
@@ -77,7 +77,7 @@ class MySpecialTextSpanBuilder extends SpecialTextSpanBuilder {
   }
 ```
 
-1. 通过代码控制样式文本
+3. 通过代码控制样式文本
 
 ```
           FloatingActionButton(
