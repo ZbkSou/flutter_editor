@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_editor/special_text_content.dart';
 
 import 'demo/my_special_text_span_builder.dart';
-import 'extand_text_field.dart';
+import 'extend_text_field.dart';
 
 void main() {
   runApp(MyApp());
@@ -52,16 +52,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   late SpecialTextContentListNotifier specialTextContentDataController;
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+
 
 
   @override
@@ -73,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
     new SpecialTextContentListNotifier(specialTextContentList);
     specialTextContentDataController.addListener(() {
       specialTextContentList = specialTextContentDataController.value;
-      print(specialTextContentList.getContent());
+      print("样式改变："+specialTextContentList.getContent());
     });
   }
 
@@ -112,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ExtandTextField(
+            ExtendTextField(
                 onChangeListen: (diff, selection) {
                   print(diff);
                   return "";
@@ -122,30 +113,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     specialTextContentDataController,
                 decoration: InputDecoration(
                   hintMaxLines: 100,
-                  hintText: "sss",
+                  hintText: "富文本编辑框",
                   border: InputBorder.none,
                 )),
-            Text.rich(TextSpan(
-              children: <InlineSpan>[
-                TextSpan(
-                  text: 'Flutter is',
-                ),
-                WidgetSpan(
-                    child: SizedBox(
-                  width: 120,
-                  height: 50,
-                  child: Card(
-                      color: Colors.blue,
-                      child: Center(child: Text('Hello World!'))),
-                )),
-                TextSpan(text: 'the best!'),
-              ],
-            )),
           ],
         ),
       ),
       floatingActionButton:
-          FloatingActionButton(child: Icon(Icons.refresh), onPressed: () {
+          FloatingActionButton(child: Icon(Icons.add), onPressed: () {
 
             SpecialTextContent content = new SpecialTextContent();
             content.text = "11111";

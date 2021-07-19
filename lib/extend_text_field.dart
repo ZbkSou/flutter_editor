@@ -14,7 +14,7 @@ import 'package:flutter_editor/special_text_content.dart';
 import 'package:flutter_editor/special_text_span_builder.dart';
 
 import 'diff.dart';
-import 'extand_editable_text.dart';
+import 'extend_editable_text.dart';
 import 'extended_text_selection.dart';
 
 
@@ -280,7 +280,7 @@ typedef ChangeCallback = String Function(Diff diff, TextSelection selection);
 ///  * Cookbook: [Handle changes to a text field](https://flutter.dev/docs/cookbook/forms/text-field-changes)
 ///  * Cookbook: [Retrieve the value of a text field](https://flutter.dev/docs/cookbook/forms/retrieve-input)
 ///  * Cookbook: [Focus and text fields](https://flutter.dev/docs/cookbook/forms/focus)
-class ExtandTextField extends StatefulWidget {
+class ExtendTextField extends StatefulWidget {
   /// Creates a Material Design text field.
   ///
   /// If [decoration] is non-null (which is the default), the text field requires
@@ -330,7 +330,7 @@ class ExtandTextField extends StatefulWidget {
   ///
   ///  * [maxLength], which discusses the precise meaning of "number of
   ///    characters" and how it may differ from the intuitive meaning.
-  const ExtandTextField({
+  const ExtendTextField({
     Key? key,
     this.controller,
     this.focusNode,
@@ -867,7 +867,7 @@ class ExtandTextField extends StatefulWidget {
   }
 }
 
-class _TextFieldState extends State<ExtandTextField> with RestorationMixin
+class _TextFieldState extends State<ExtendTextField> with RestorationMixin
     implements ExtendedTextSelectionGestureDetectorBuilderDelegate {
   RestorableTextEditingController? _controller;
   TextEditingController get _effectiveController => widget.controller ?? _controller!.value;
@@ -892,8 +892,8 @@ class _TextFieldState extends State<ExtandTextField> with RestorationMixin
   @override
   late bool forcePressEnabled;
 
-  final GlobalKey<ExtandEditableTextState> editableTextKey =
-  GlobalKey<ExtandEditableTextState>();
+  final GlobalKey<ExtendEditableTextState> editableTextKey =
+  GlobalKey<ExtendEditableTextState>();
 
   @override
   bool get selectionEnabled => widget.selectionEnabled;
@@ -1012,7 +1012,7 @@ class _TextFieldState extends State<ExtandTextField> with RestorationMixin
   }
 
   @override
-  void didUpdateWidget(ExtandTextField oldWidget) {
+  void didUpdateWidget(ExtendTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller == null && oldWidget.controller != null) {
       _createLocalController(oldWidget.controller!.value);
@@ -1061,7 +1061,7 @@ class _TextFieldState extends State<ExtandTextField> with RestorationMixin
     super.dispose();
   }
 
-  ExtandEditableTextState? get _editableText => editableTextKey.currentState;
+  ExtendEditableTextState? get _editableText => editableTextKey.currentState;
 
   void _requestKeyboard() {
     _editableText?.requestKeyboard();
@@ -1222,7 +1222,7 @@ class _TextFieldState extends State<ExtandTextField> with RestorationMixin
     Widget child = RepaintBoundary(
       child: UnmanagedRestorationScope(
         bucket: bucket,
-        child: ExtandEditableText(
+        child: ExtendEditableText(
           key: editableTextKey,
           specialTextSpanBuilder: widget.specialTextSpanBuilder,
           onChangeListen: widget.onChangeListen,

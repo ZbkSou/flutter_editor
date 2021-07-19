@@ -14,7 +14,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 import 'diff.dart';
-import 'extand_text_field.dart';
+import 'extend_text_field.dart';
 import 'special_text_content.dart';
 import 'special_text_span_builder.dart';
 
@@ -125,7 +125,7 @@ const int _kObscureShowLatestCharCursorTicks = 3;
 ///
 ///  * [TextField], which is a full-featured, material-design text input field
 ///    with placeholder text, labels, and [Form] integration.
-class ExtandEditableText extends StatefulWidget {
+class ExtendEditableText extends StatefulWidget {
   /// Creates a basic text input control.
   ///
   /// The [maxLines] property can be set to null to remove the restriction on
@@ -147,7 +147,7 @@ class ExtandEditableText extends StatefulWidget {
   /// [selectionWidthStyle], [textAlign], [dragStartBehavior], [scrollPadding],
   /// [dragStartBehavior], [toolbarOptions], [rendererIgnoresPointer], and
   /// [readOnly] arguments must not be null.
-  ExtandEditableText({
+  ExtendEditableText({
     Key? key,
     this.specialTextSpanBuilder,
     this.specialTextContentDataController,
@@ -1225,7 +1225,7 @@ class ExtandEditableText extends StatefulWidget {
   }
 
   @override
-  ExtandEditableTextState createState() => ExtandEditableTextState();
+  ExtendEditableTextState createState() => ExtendEditableTextState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -1282,11 +1282,11 @@ class ExtandEditableText extends StatefulWidget {
 }
 
 /// State for a [EditableText].
-class ExtandEditableTextState extends State<ExtandEditableText>
+class ExtendEditableTextState extends State<ExtendEditableText>
     with
-        AutomaticKeepAliveClientMixin<ExtandEditableText>,
+        AutomaticKeepAliveClientMixin<ExtendEditableText>,
         WidgetsBindingObserver,
-        TickerProviderStateMixin<ExtandEditableText>,
+        TickerProviderStateMixin<ExtendEditableText>,
         TextSelectionDelegate
     implements TextInputClient, AutofillClient, TextEditingActionTarget {
   Timer? _cursorTimer;
@@ -1434,7 +1434,7 @@ class ExtandEditableTextState extends State<ExtandEditableText>
   }
 
   @override
-  void didUpdateWidget(ExtandEditableText oldWidget) {
+  void didUpdateWidget(ExtendEditableText oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.specialTextContentDataController != oldWidget.specialTextContentDataController) {
       oldWidget.specialTextContentDataController!.removeListener(_handleSpecialTextContentChanged);
