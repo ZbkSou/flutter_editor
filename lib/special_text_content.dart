@@ -118,6 +118,7 @@ class SpecialTextContentList {
           continue;
         }
         String str = (specialTextContent.text as String);
+        int type = specialTextContent.type;
         tmp += str.length;
         if (index <= tmp) {
           if (specialTextContent.type == 0) {
@@ -142,10 +143,10 @@ class SpecialTextContentList {
               String str2 = str.substring(realIndex);
               SpecialTextContent specialTextContent1 = SpecialTextContent();
               specialTextContent1.text = str1;
-
+              specialTextContent1.type = type;
               SpecialTextContent specialTextContent2 = SpecialTextContent();
               specialTextContent2.text = str2;
-
+              specialTextContent2.type = type;
               list[i] = specialTextContent1;
 
               list.insert(i + 1, specialTextContent);

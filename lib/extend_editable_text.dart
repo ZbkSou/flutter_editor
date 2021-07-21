@@ -1398,7 +1398,7 @@ class ExtendEditableTextState extends State<ExtendEditableText>
     _cursorVisibilityNotifier.value = widget.showCursor;
   }
   /// zzzzz
-  ///当特殊格式数据改变的时候触犯
+  ///当特殊格式数据改变的时候
   void _handleSpecialTextContentChanged() {
     if(widget.specialTextContentDataController!=null){
       widget.controller.value = widget.controller.value.copyWith(
