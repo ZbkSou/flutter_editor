@@ -9,6 +9,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import 'extend_render_editable.dart';
+
 /// Delegate interface for the [ExtendedTextSelectionGestureDetectorBuilder].
 ///
 /// The interface is usually implemented by textfield implementations wrapping
@@ -26,7 +28,7 @@ abstract class ExtendedTextSelectionGestureDetectorBuilderDelegate {
   /// [GlobalKey] to the [EditableText] for which the
   /// [ExtendedTextSelectionGestureDetectorBuilder] will build a [TextSelectionGestureDetector].
 
-  RenderEditable get renderEditable;
+  ExtendRenderEditable get renderEditable;
 
   /// Whether the textfield should respond to force presses.
   bool get forcePressEnabled;
@@ -103,7 +105,7 @@ class ExtendedTextSelectionGestureDetectorBuilder {
   // ExtendedTextSelectionRenderObject get renderEditable =>
   //     delegate.renderEditable;
   @protected
-  RenderEditable get renderEditable =>  delegate.renderEditable;
+  ExtendRenderEditable get renderEditable =>  delegate.renderEditable;
   /// Handler for [TextSelectionGestureDetector.onTapDown].
   ///
   /// By default, it forwards the tap to [RenderEditable.handleTapDown] and sets

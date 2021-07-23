@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_editor/demo/red_text.dart';
 import '../special_text_content.dart';
 import '../special_text_span_builder.dart';
+import 'nod_switch_icon_span.dart';
 
 ///
 ///  my_special_text_span_builder
@@ -37,6 +38,11 @@ class MySpecialTextSpanBuilder extends SpecialTextSpanBuilder {
           inlineList.add(specialText.finishText());
           specialText = null;
           break;
+          case 2:
+        specialText = NodSwitchIconSpan(textStyle!,int.parse(content.hint??"0"));
+        inlineList.add(specialText.finishText());
+        specialText = null;
+        break;
       }
 
     }

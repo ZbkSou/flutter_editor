@@ -14,7 +14,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 import 'diff.dart';
+import 'extend_render_editable.dart';
 import 'extend_text_field.dart';
+import 'extend_text_selection_overlay.dart';
 import 'special_text_content.dart';
 import 'special_text_span_builder.dart';
 
@@ -1280,7 +1282,14 @@ class ExtendEditableText extends StatefulWidget {
         defaultValue: null));
   }
 }
-
+abstract class TextEditingActionTarget {
+  /// The renderer that handles [TextEditingAction]s.
+  ///
+  /// See also:
+  ///
+  /// * [EditableTextState.renderEditable], which overrides this.
+  ExtendRenderEditable get renderEditable;
+}
 /// State for a [EditableText].
 class ExtendEditableTextState extends State<ExtendEditableText>
     with
@@ -1298,7 +1307,7 @@ class ExtendEditableTextState extends State<ExtendEditableText>
       kIsWeb ? null : ClipboardStatusNotifier();
 
   TextInputConnection? _textInputConnection;
-  TextSelectionOverlay? _selectionOverlay;
+  ExtendTextSelectionOverlay? _selectionOverlay;
 
   ScrollController? _scrollController;
 
@@ -2036,7 +2045,7 @@ class ExtendEditableTextState extends State<ExtendEditableText>
       _selectionOverlay = null;
     } else {
       if (_selectionOverlay == null) {
-        _selectionOverlay = TextSelectionOverlay(
+        _selectionOverlay = ExtendTextSelectionOverlay(
           clipboardStatus: _clipboardStatus,
           context: context,
           value: _value,
@@ -2230,7 +2239,7 @@ class ExtendEditableTextState extends State<ExtendEditableText>
 
   /// The current status of the text selection handles.
   @visibleForTesting
-  TextSelectionOverlay? get selectionOverlay => _selectionOverlay;
+  ExtendTextSelectionOverlay? get selectionOverlay => _selectionOverlay;
 
   int _obscureShowCharTicksPending = 0;
   int? _obscureLatestCharIndex;
@@ -2400,8 +2409,8 @@ class ExtendEditableTextState extends State<ExtendEditableText>
   /// This property is typically used to notify the renderer of input gestures
   /// when [RenderEditable.ignorePointer] is true.
   @override
-  RenderEditable get renderEditable =>
-      _editableKey.currentContext!.findRenderObject()! as RenderEditable;
+  ExtendRenderEditable get renderEditable =>
+      _editableKey.currentContext!.findRenderObject()! as ExtendRenderEditable;
 
   @override
   TextEditingValue get textEditingValue => _value;
@@ -2766,7 +2775,7 @@ class _Editable extends LeafRenderObjectWidget {
         assert(rendererIgnoresPointer != null),
         super(key: key);
 
-  final TextSpan textSpan;
+  final InlineSpan textSpan;
   final TextEditingValue value;
   final Color? cursorColor;
   final LayerLink startHandleLayerLink;
@@ -2811,8 +2820,8 @@ class _Editable extends LeafRenderObjectWidget {
   final Clip clipBehavior;
 
   @override
-  RenderEditable createRenderObject(BuildContext context) {
-    return RenderEditable(
+  ExtendRenderEditable createRenderObject(BuildContext context) {
+    return ExtendRenderEditable(
       text: textSpan,
       cursorColor: cursorColor,
       startHandleLayerLink: startHandleLayerLink,
@@ -2856,7 +2865,7 @@ class _Editable extends LeafRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderEditable renderObject) {
+  void updateRenderObject(BuildContext context, ExtendRenderEditable renderObject) {
     renderObject
       ..text = textSpan
       ..cursorColor = cursorColor

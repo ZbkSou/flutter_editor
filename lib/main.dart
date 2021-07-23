@@ -135,6 +135,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 "323234243243243数量的开发计划事件的看法就开始了的323234243243243数量的开发计划事件的看法就开始了的323234243243243数量的开发计划事件的看法就开始了的323234243243243数量的开发计划事件的看法就开始了的323234243243243数量的开发计划事件的看法就开始了的323234243243243数量的开发计划事件的看法就开始了的的";
             content.type = 1;
             specialTextContentDataController.add(content);
+            SpecialTextContent content2 = new SpecialTextContent();
+           content2.hint ="2";
+            content2.type = 2;
+            specialTextContentDataController.add(content2);
+            specialTextContentDataController.add(content);
           }),
     );
   }

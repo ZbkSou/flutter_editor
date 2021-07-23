@@ -15,6 +15,7 @@ import 'package:flutter_editor/special_text_span_builder.dart';
 
 import 'diff.dart';
 import 'extend_editable_text.dart';
+import 'extend_render_editable.dart';
 import 'extended_text_selection.dart';
 
 
@@ -1355,5 +1356,5 @@ class _TextFieldState extends State<ExtendTextField> with RestorationMixin
 
 
   @override
-  RenderEditable get renderEditable => editableTextKey.currentState!.renderEditable;
+  ExtendRenderEditable get renderEditable => editableTextKey.currentState!.renderEditable;
 }
