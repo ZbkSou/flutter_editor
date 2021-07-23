@@ -1110,8 +1110,15 @@ class ExtendRenderEditable extends ExtendTextSelectionRenderObject {
   List<TextSelectionPoint> getEndpointsForSelection(TextSelection selection) {
     layoutText(minWidth: constraints.minWidth, maxWidth: constraints.maxWidth);
 
-    final Offset paintOffset = _paintOffset;
+    //final Offset paintOffset = _paintOffset;
+    ///zmt
+    final Offset effectiveOffset = _effectiveOffset;
 
+    TextSelection textPainterSelection = selection;
+    if (hasSpecialInlineSpanBase) {
+      textPainterSelection =
+          convertTextInputSelectionToTextPainterSelection(text!, selection);
+    }
     if (selection.isCollapsed) {
       // todo(mpcomplete): This doesn't work well at an RTL/LTR boundary.
 
@@ -1633,10 +1640,7 @@ class ExtendRenderEditable extends ExtendTextSelectionRenderObject {
     bool showSelection = false;
     bool showCaret = false;
 
-    ///zmt
-    final TextSelection? actualSelection = hasSpecialInlineSpanBase
-        ? convertTextInputSelectionToTextPainterSelection(text!, _selection!)
-        : _selection;
+    final TextSelection? actualSelection =  _selection;
 
     if (actualSelection != null && !_floatingCursorOn) {
       if (actualSelection.isCollapsed &&
@@ -1703,9 +1707,7 @@ class ExtendRenderEditable extends ExtendTextSelectionRenderObject {
   }
 
   void _paintSpecialText(PaintingContext context, Offset offset) {
-    if (!hasSpecialInlineSpanBase) {
-      return;
-    }
+
 
     final Canvas canvas = context.canvas;
 
@@ -1737,7 +1739,18 @@ class ExtendRenderEditable extends ExtendTextSelectionRenderObject {
         return;
       }
 
-   if (ts is TextSpan && ts.children != null) {
+      if (ts is BackgroundTextSpan) {
+        final TextPainter painter = ts.layout(_textPainter)!;
+        final Rect textRect = topLeftOffset & painter.size;
+        Offset? endOffset;
+        if (textRect.right > rect.right) {
+          final int endTextOffset = textOffset + ts.toPlainText().length;
+          endOffset = _findEndOffset(rect, endTextOffset);
+        }
+
+        ts.paint(canvas, topLeftOffset, rect,
+            endOffset: endOffset, wholeTextPainter: _textPainter);
+      } else if (ts is TextSpan && ts.children != null) {
         _paintSpecialTextChildren(ts.children, canvas, rect,
             textOffset: textOffset);
       }
@@ -1832,4 +1845,15 @@ class ExtendRenderEditable extends ExtendTextSelectionRenderObject {
 
   @override
   Rect get caretPrototype => _caretPrototype;
+}
+String textSpanToActualText(InlineSpan textSpan) {
+  final StringBuffer buffer = StringBuffer();
+
+  textSpan.visitChildren((InlineSpan span) {
+
+      // ignore: invalid_use_of_protected_member
+      span.computeToPlainText(buffer);
+    return true;
+  });
+  return buffer.toString();
 }
