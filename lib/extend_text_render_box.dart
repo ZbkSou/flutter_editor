@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_editor/special_inline_span_base.dart';
 
 
 /// Widget Span for them
@@ -40,7 +41,9 @@ abstract class ExtendTextRenderBox extends RenderBox
         final PlaceholderSpan placeholderSpan = span;
         _placeholderSpans.add(placeholderSpan);
       }
-
+      if (span is SpecialInlineSpanBase) {
+        _hasSpecialInlineSpanBase = true;
+      }
       return true;
     });
   }
@@ -351,7 +354,38 @@ abstract class ExtendTextRenderBox extends RenderBox
     Rect caretPrototype = Rect.zero,
   }) {
     effectiveOffset ??= Offset.zero;
-
+    ///zmt
+    /// fix widget span
+    if (hasPlaceholderSpan) {
+      ///if first index, check by first span
+      int offset = textPosition.offset;
+      List<TextBox> boxs = textPainter.getBoxesForSelection(TextSelection(
+          baseOffset: offset,
+          extentOffset: offset + 1,
+          affinity: textPosition.affinity));
+      if (boxs.isNotEmpty) {
+        final Rect rect = boxs.toList().last.toRect();
+        caretHeightCallBack?.call(rect.height);
+        return rect.topLeft + effectiveOffset;
+      } else {
+        if (offset <= 0) {
+          offset = 1;
+        }
+        boxs = textPainter.getBoxesForSelection(TextSelection(
+            baseOffset: offset - 1,
+            extentOffset: offset,
+            affinity: textPosition.affinity));
+        if (boxs.isNotEmpty) {
+          final Rect rect = boxs.toList().last.toRect();
+          caretHeightCallBack?.call(rect.height);
+          if (textPosition.offset <= 0) {
+            return rect.topLeft + effectiveOffset;
+          } else {
+            return rect.topRight + effectiveOffset;
+          }
+        }
+      }
+    }
     final Offset caretOffset =
         textPainter.getOffsetForCaret(textPosition, caretPrototype) +
             effectiveOffset;

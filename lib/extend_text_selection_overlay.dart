@@ -482,7 +482,7 @@ class _TextSelectionHandleOverlayState
     widget.renderObject.getPositionForPoint(_dragPosition);
 
     if (widget.selection.isCollapsed) {
-      widget.onSelectionHandleChanged(TextSelection.fromPosition(position!));
+      widget.onSelectionHandleChanged(TextSelection.fromPosition(position));
       return;
     }
 
@@ -490,14 +490,14 @@ class _TextSelectionHandleOverlayState
     switch (widget.position) {
       case _TextSelectionHandlePosition.start:
         newSelection = TextSelection(
-          baseOffset: position!.offset,
+          baseOffset: position.offset,
           extentOffset: widget.selection.extentOffset,
         );
         break;
       case _TextSelectionHandlePosition.end:
         newSelection = TextSelection(
           baseOffset: widget.selection.baseOffset,
-          extentOffset: position!.offset,
+          extentOffset: position.offset,
         );
         break;
     }

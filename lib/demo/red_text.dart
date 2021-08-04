@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/painting/inline_span.dart';
 import 'package:flutter/src/painting/text_style.dart';
 
+import '../special_text_span.dart';
 import '../special_text_span_builder.dart';
 
 ///
@@ -22,7 +23,7 @@ class RedText   extends SpecialText {
   InlineSpan finishText() {
     final String text = getContent();
 
-    return TextSpan(
+    return SpecialTextSpan(
         text: text,
         style: textStyle.copyWith(color:Colors.red),
         recognizer: TapGestureRecognizer()

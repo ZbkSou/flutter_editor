@@ -16,6 +16,7 @@ import 'package:flutter_editor/special_text_span_builder.dart';
 import 'diff.dart';
 import 'extend_editable_text.dart';
 import 'extend_render_editable.dart';
+import 'extend_text_selection_render_object.dart';
 import 'extended_text_selection.dart';
 
 
@@ -895,7 +896,9 @@ class _TextFieldState extends State<ExtendTextField> with RestorationMixin
 
   final GlobalKey<ExtendEditableTextState> editableTextKey =
   GlobalKey<ExtendEditableTextState>();
-
+  @override
+  ExtendTextSelectionRenderObject get renderEditable =>
+      editableTextKey.currentState!.renderEditable;
   @override
   bool get selectionEnabled => widget.selectionEnabled;
   // End of API for TextSelectionGestureDetectorBuilderDelegate.
@@ -1354,7 +1357,4 @@ class _TextFieldState extends State<ExtendTextField> with RestorationMixin
     );
   }
 
-
-  @override
-  ExtendRenderEditable get renderEditable => editableTextKey.currentState!.renderEditable;
 }

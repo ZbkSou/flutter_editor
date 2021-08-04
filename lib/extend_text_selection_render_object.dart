@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'extend_text_render_box.dart';
+import 'extend_text_utils.dart';
 
 
 ///
@@ -225,6 +226,9 @@ abstract class ExtendTextSelectionRenderObject extends ExtendTextRenderBox {
           offset: word.end,
           affinity: endOfLine ? position.affinity : TextAffinity.upstream);
     }
+    selection = hasSpecialInlineSpanBase
+        ? convertTextPainterSelectionToTextInputSelection(text!, selection)
+        : selection;
     _handleSelectionChange(selection, cause);
   }
 
@@ -254,7 +258,13 @@ abstract class ExtendTextSelectionRenderObject extends ExtendTextRenderBox {
       TextPosition? toPosition = to == null
           ? null
           : textPainter.getPositionForOffset(globalToLocal(to - paintOffset));
-
+      //zmt
+      if (hasSpecialInlineSpanBase) {
+        fromPosition =
+            convertTextPainterPostionToTextInputPostion(text!, fromPosition);
+        toPosition =
+            convertTextPainterPostionToTextInputPostion(text!, toPosition);
+      }
       int baseOffset = fromPosition!.offset;
       int extentOffset = fromPosition.offset;
 
@@ -333,7 +343,11 @@ abstract class ExtendTextSelectionRenderObject extends ExtendTextRenderBox {
       }
     }
     selection ??= TextSelection(baseOffset: word.start, extentOffset: word.end);
-
+    /// zmt
+    return hasSpecialInlineSpanBase
+        ? convertTextPainterSelectionToTextInputSelection(text!, selection,
+        selectWord: true)
+        : selection;
     return selection;
   }
 

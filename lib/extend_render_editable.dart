@@ -9,6 +9,7 @@ import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
 import 'extend_text_selection_render_object.dart';
+import 'extend_text_utils.dart';
 ///
 ///  extended_render_editable
 ///  @author: DreamilyAI
@@ -1640,8 +1641,10 @@ class ExtendRenderEditable extends ExtendTextSelectionRenderObject {
     bool showSelection = false;
     bool showCaret = false;
 
-    final TextSelection? actualSelection =  _selection;
-
+    ///zmt
+    final TextSelection? actualSelection = hasSpecialInlineSpanBase
+        ? convertTextInputSelectionToTextPainterSelection(text!, _selection!)
+        : _selection;
     if (actualSelection != null && !_floatingCursorOn) {
       if (actualSelection.isCollapsed &&
           _showCursor.value &&
@@ -1739,18 +1742,7 @@ class ExtendRenderEditable extends ExtendTextSelectionRenderObject {
         return;
       }
 
-      if (ts is BackgroundTextSpan) {
-        final TextPainter painter = ts.layout(_textPainter)!;
-        final Rect textRect = topLeftOffset & painter.size;
-        Offset? endOffset;
-        if (textRect.right > rect.right) {
-          final int endTextOffset = textOffset + ts.toPlainText().length;
-          endOffset = _findEndOffset(rect, endTextOffset);
-        }
-
-        ts.paint(canvas, topLeftOffset, rect,
-            endOffset: endOffset, wholeTextPainter: _textPainter);
-      } else if (ts is TextSpan && ts.children != null) {
+      if (ts is TextSpan && ts.children != null) {
         _paintSpecialTextChildren(ts.children, canvas, rect,
             textOffset: textOffset);
       }

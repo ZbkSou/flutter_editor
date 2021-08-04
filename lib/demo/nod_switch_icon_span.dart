@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../extend_widget_span.dart';
 import '../special_text_span_builder.dart';
 
 ///
@@ -22,7 +23,7 @@ class NodSwitchIconSpan extends SpecialText {
   @override
   InlineSpan finishText() {
 
-    return WidgetSpan(
+    return ExtendWidgetSpan(
         child:InkWell(
           highlightColor: Colors.transparent,
           splashColor: Colors.transparent,

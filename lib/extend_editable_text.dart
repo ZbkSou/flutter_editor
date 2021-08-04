@@ -17,6 +17,7 @@ import 'diff.dart';
 import 'extend_render_editable.dart';
 import 'extend_text_field.dart';
 import 'extend_text_selection_overlay.dart';
+import 'extend_text_selection_render_object.dart';
 import 'special_text_content.dart';
 import 'special_text_span_builder.dart';
 
@@ -2725,8 +2726,8 @@ class ExtendEditableTextState extends State<ExtendEditableText>
   }
 }
 
-class _Editable extends LeafRenderObjectWidget {
-  const _Editable({
+class _Editable extends MultiChildRenderObjectWidget {
+   _Editable({
     Key? key,
     required this.textSpan,
     required this.value,
@@ -2756,6 +2757,7 @@ class _Editable extends LeafRenderObjectWidget {
     required this.smartQuotesType,
     required this.enableSuggestions,
     required this.offset,
+     this.onSelectionChanged,
     this.onCaretChanged,
     this.rendererIgnoresPointer = false,
     required this.cursorWidth,
@@ -2768,56 +2770,72 @@ class _Editable extends LeafRenderObjectWidget {
     this.enableInteractiveSelection = true,
     required this.textSelectionDelegate,
     required this.devicePixelRatio,
+     this.supportSpecialText = false,
     this.promptRectRange,
     this.promptRectColor,
     required this.clipBehavior,
-  })  : assert(textDirection != null),
-        assert(rendererIgnoresPointer != null),
-        super(key: key);
+  })  : super(
+    key: key,
+    children: _extractChildren(textSpan),
+  );
+   // Traverses the InlineSpan tree and depth-first collects the list of
+   // child widgets that are created in WidgetSpans.
+   static List<Widget> _extractChildren(InlineSpan span) {
+     final List<Widget> result = <Widget>[];
+     span.visitChildren((InlineSpan span) {
+       if (span is WidgetSpan) {
+         result.add(span.child);
+       }
+       return true;
+     });
+     return result;
+   }
 
-  final InlineSpan textSpan;
-  final TextEditingValue value;
-  final Color? cursorColor;
-  final LayerLink startHandleLayerLink;
-  final LayerLink endHandleLayerLink;
-  final Color? backgroundCursorColor;
-  final ValueNotifier<bool> showCursor;
-  final bool forceLine;
-  final bool readOnly;
-  final bool hasFocus;
-  final int? maxLines;
-  final int? minLines;
-  final bool expands;
-  final StrutStyle? strutStyle;
-  final Color? selectionColor;
-  final double textScaleFactor;
-  final TextAlign textAlign;
-  final TextDirection textDirection;
-  final Locale? locale;
-  final String obscuringCharacter;
-  final bool obscureText;
-  final TextHeightBehavior? textHeightBehavior;
-  final TextWidthBasis textWidthBasis;
-  final bool autocorrect;
-  final SmartDashesType smartDashesType;
-  final SmartQuotesType smartQuotesType;
-  final bool enableSuggestions;
-  final ViewportOffset offset;
-  final CaretChangedHandler? onCaretChanged;
-  final bool rendererIgnoresPointer;
-  final double cursorWidth;
-  final double? cursorHeight;
-  final Radius? cursorRadius;
-  final Offset cursorOffset;
-  final bool paintCursorAboveText;
-  final ui.BoxHeightStyle selectionHeightStyle;
-  final ui.BoxWidthStyle selectionWidthStyle;
-  final bool enableInteractiveSelection;
-  final TextSelectionDelegate textSelectionDelegate;
-  final double devicePixelRatio;
-  final TextRange? promptRectRange;
-  final Color? promptRectColor;
-  final Clip clipBehavior;
+   final bool supportSpecialText;
+   final InlineSpan textSpan;
+   final TextEditingValue value;
+   final Color? cursorColor;
+   final LayerLink startHandleLayerLink;
+   final LayerLink endHandleLayerLink;
+   final Color? backgroundCursorColor;
+   final ValueNotifier<bool> showCursor;
+   final bool forceLine;
+   final bool readOnly;
+   final bool hasFocus;
+   final int? maxLines;
+   final int? minLines;
+   final bool expands;
+   final StrutStyle? strutStyle;
+   final Color? selectionColor;
+   final double textScaleFactor;
+   final TextAlign textAlign;
+   final TextDirection textDirection;
+   final Locale? locale;
+   final String obscuringCharacter;
+   final bool obscureText;
+   final TextHeightBehavior? textHeightBehavior;
+   final TextWidthBasis textWidthBasis;
+   final bool autocorrect;
+   final SmartDashesType smartDashesType;
+   final SmartQuotesType smartQuotesType;
+   final bool enableSuggestions;
+   final ViewportOffset offset;
+   final TextSelectionChangedHandler? onSelectionChanged;
+   final CaretChangedHandler? onCaretChanged;
+   final bool rendererIgnoresPointer;
+   final double cursorWidth;
+   final double? cursorHeight;
+   final Radius? cursorRadius;
+   final Offset? cursorOffset;
+   final bool paintCursorAboveText;
+   final ui.BoxHeightStyle selectionHeightStyle;
+   final ui.BoxWidthStyle selectionWidthStyle;
+   final bool enableInteractiveSelection;
+   final TextSelectionDelegate textSelectionDelegate;
+   final double devicePixelRatio;
+   final TextRange? promptRectRange;
+   final Color? promptRectColor;
+   final Clip clipBehavior;
 
   @override
   ExtendRenderEditable createRenderObject(BuildContext context) {
